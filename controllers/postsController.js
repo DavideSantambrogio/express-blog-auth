@@ -27,6 +27,7 @@ exports.getPosts = (req, res) => {
         'text/html': function () {
             let html = initialPage + '<ul>';
             posts.forEach(post => {
+                // Creazione del link per la visualizzazione del singolo post
                 const postLink = `<a href="/posts/${post.slug}">${post.title}</a>`;
                 html += `
                     <li>
@@ -46,9 +47,10 @@ exports.getPosts = (req, res) => {
 };
 
 // Funzione per visualizzare un singolo post
+// Funzione per visualizzare un singolo post
 exports.getPostBySlug = (req, res) => {
     const slug = req.params.slug;
-    const post = findPostBySlug(slug);
+    const post = posts.find(post => post.slug === slug);
 
     if (!post) {
         return res.status(404).json({ error: 'Post not found' });
@@ -123,6 +125,7 @@ exports.addPost = [
     }
 ];
 
+
 // Funzione per creare una pagina per la creazione di un nuovo post
 exports.createPostPage = (req, res) => {
     const accept = req.headers.accept;
@@ -135,9 +138,10 @@ exports.createPostPage = (req, res) => {
 };
 
 // Funzione per scaricare l'immagine del post tramite lo slug
+// Funzione per scaricare l'immagine del post tramite lo slug
 exports.downloadImageBySlug = (req, res) => {
     const slug = req.params.slug;
-    const post = findPostBySlug(slug);
+    const post = posts.find(post => post.slug === slug);
 
     if (!post) {
         return res.status(404).json({ error: 'Post not found' });
@@ -148,8 +152,9 @@ exports.downloadImageBySlug = (req, res) => {
     res.download(imagePath, (err) => {
         if (err) {
             console.error('Errore durante il download dell\'immagine:', err);
-            res.status(500).json({ error: 'Errore durante il download dell\'immagine' });
+            return res.status(500).json({ error: 'Errore durante il download dell\'immagine' });
         }
+        console.log('Immagine scaricata correttamente.');
     });
 };
 

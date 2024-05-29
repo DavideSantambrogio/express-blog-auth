@@ -1,16 +1,19 @@
+require('dotenv').config();
 const express = require('express');
 const app = express();
 const postRouter = require('./routers/postRouter'); // Importa il router per le rotte dei post
+const authRouter = require('./routers/authRouter'); // Importa il router per l'autenticazione
+const postsController = require('./controllers/postsController'); // Importa il controller dei post
 
 // Middleware per il parsing del corpo della richiesta
 app.use(express.json());
-app.use(express.urlencoded({ extended: true })); // Middleware per application/x-www-form-urlencoded
 
 // Configurare gli asset statici
 app.use(express.static('public'));
 
-// Utilizza il router per le rotte relative ai post
+// Utilizza i router per le rotte relative ai post e all'autenticazione
 app.use('/posts', postRouter);
+app.use('/auth', authRouter);
 
 app.get('/', (req, res) => {
     res.send(`
